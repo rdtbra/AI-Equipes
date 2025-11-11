@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Launcher – Equipes de IA</title>
+  <meta name="description" content="Abra várias IAs em abas com um clique.">
+  <style>
+    :root{--bg:#f5f7fb;--fg:#0f172a;--muted:#475569;--card:#ffffff;--border:#e5e7eb;--accent:#4f46e5}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em}
+    p{margin:6px 0 0;color:var(--muted)}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:18px 0}
+    .btn{border:1px solid var(--border);background:#fff;border-radius:12px;padding:10px 14px;cursor:pointer}
+    .btn:hover{background:#fafafa}
+    .btn-danger{border-color:#fecaca;background:#fff5f5}
+    .row{display:grid;grid-template-columns:1fr;gap:14px}
+    @media(min-width:840px){.row{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-left:6px solid var(--accent);border-radius:16px;padding:16px;box-shadow:0 2px 6px rgba(15,23,42,.04)}
+    .card h2{margin:0 0 10px 0;font-size:18px}
+    .card .actions{display:flex;gap:8px;margin-bottom:10px}
+    .grid{display:grid;grid-template-columns:1fr;gap:8px}
+    @media(min-width:840px){.grid{grid-template-columns:1fr 1fr}}
+    .item{display:flex;gap:8px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px}
+    .item input[type='text']{border:1px solid var(--border);border-radius:10px;padding:8px}
+    .name{flex:1 1 160px}
+    .url{flex:2 1 300px}
+    .footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    .tag{display:inline-block;padding:4px 8px;border-radius:10px;background:#eef2ff;color:#3730a3;font-size:12px;margin-left:8px}
+    .checkbox{width:18px;height:18px}
+    .color{width:14px;height:14px;border-radius:50%;display:inline-block;margin-right:8px;vertical-align:middle}
+    .input{border:1px solid var(--border);border-radius:10px;padding:8px;background:#fff}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Launcher – Equipes de IA <span class="tag">multi‑abas</span></h1>
+    <p class="small">Clique em <b>Abrir TUDO</b> ou em <b>Abrir todas</b> por grupo. Se o navegador bloquear, permita pop-ups para este site.</p>
+
+    <div class="toolbar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="openAll">Abrir TUDO</button>
+        <button class="btn" id="addGroup">+ Grupo</button>
+        <button class="btn" id="export">Exportar</button>
+        <button class="btn" id="import">Importar</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label class="small">Atraso entre abas (ms)</label>
+        <input class="input" style="width:110px" type="number" id="delay" min="0" step="50" value="0" title="Se pop-ups forem bloqueados, tente um pequeno atraso.">
+      </div>
+    </div>
+
+    <div id="groups" class="row"></div>
+
+    <div class="footer">
+      <span>Configuração salva no navegador (localStorage).</span>
+      <button class="btn btn-danger" id="reset">Restaurar padrão</button>
+    </div>
+  </div>
+
+<script>
+const DEFAULT_GROUPS = [
+  { id: id(), name: "Principais IAs", color: "#2563eb", items: [
+    { label: "ChatGPT", url: "https://chat.openai.com/", checked: true },
+    { label: "Claude", url: "https://claude.ai/", checked: true },
+    { label: "Gemini", url: "https://gemini.google.com/", checked: true },
+    { label: "Perplexity", url: "https://www.perplexity.ai/", checked: true },
+    { label: "Copilot", url: "https://copilot.microsoft.com/", checked: true },
+    { label: "Grok", url: "https://x.com/i/grok", checked: true },
+    { label: "Mistral", url: "https://chat.mistral.ai/", checked: true }
+  ]},
+  { id: id(), name: "Auxiliares", color: "#0f766e", items: [
+    { label: "NotebookLM", url: "https://notebooklm.google/", checked: true },
+    { label: "Kimi", url: "https://kimi.moonshot.cn/", checked: true }
+  ]}
+];
+
+const KEY = "ia-launcher-config-v1";
+function id(){ return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2); }
+function load(){ try{ const j=localStorage.getItem(KEY); return j? JSON.parse(j): DEFAULT_GROUPS }catch(e){ return DEFAULT_GROUPS } }
+function save(groups){ try{ localStorage.setItem(KEY, JSON.stringify(groups)) }catch(e){} }
+
+let groups = load();
+const groupsEl = document.getElementById("groups");
+const delayEl = document.getElementById("delay");
+
+function render(){
+  groupsEl.innerHTML = "";
+  groups.forEach((g, gi) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.borderLeftColor = g.color || "#4f46e5";
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px">
+        <h2><span class="color" style="background:${g.color || "#4f46e5"}"></span>${escapeHtml(g.name || "Grupo")}</h2>
+        <div class="actions">
+          <button class="btn" data-act="open-group">Abrir todas</button>
+          <button class="btn" data-act="add-item">+ IA</button>
+          <button class="btn" data-act="edit-group">Editar</button>
+          <button class="btn" data-act="remove-group">Remover</button>
+        </div>
+      </div>
+      <div class="grid" data-role="grid"></div>
+    `;
+    const grid = card.querySelector("[data-role='grid']");
+    (g.items || []).forEach((it, ii) => {
+      const row = document.createElement("div");
+      row.className = "item";
+      row.innerHTML = `
+        <input class="checkbox" type="checkbox" ${it.checked === false ? "" : "checked"} data-role="check">
+        <input class="name" type="text" value="${escapeAttr(it.label||"")}" placeholder="Nome">
+        <input class="url" type="text" value="${escapeAttr(it.url||"")}" placeholder="https://...">
+        <button class="btn" data-act="test">Testar</button>
+        <button class="btn" data-act="remove">Remover</button>
+      `;
+      // events
+      row.querySelector("[data-role='check']").addEventListener("change", e => {
+        groups[gi].items[ii].checked = e.target.checked;
+        save(groups);
+      });
+      row.querySelector(".name").addEventListener("input", e=>{
+        groups[gi].items[ii].label = e.target.value;
+        save(groups);
+      });
+      row.querySelector(".url").addEventListener("input", e=>{
+        groups[gi].items[ii].url = e.target.value;
+        save(groups);
+      });
+      row.querySelector("[data-act='test']").addEventListener("click", ()=>{
+        const u = groups[gi].items[ii].url; if(u) window.open(u, "_blank", "noopener,noreferrer");
+      });
+      row.querySelector("[data-act='remove']").addEventListener("click", ()=>{
+        groups[gi].items.splice(ii,1); save(groups); render();
+      });
+      grid.appendChild(row);
+    });
+
+    card.querySelector("[data-act='add-item']").addEventListener("click", ()=>{
+      const url = prompt("Cole a URL (https://...)"); if(!url) return;
+      const label = prompt("Nome curto (ex.: 'ChatGPT')") || url;
+      groups[gi].items.push({label, url, checked:true});
+      save(groups); render();
+    });
+
+    card.querySelector("[data-act='edit-group']").addEventListener("click", ()=>{
+      const name = prompt("Nome do grupo:", g.name || "");
+      if(name===null) return;
+      const color = prompt("Cor (hex):", g.color || "#4f46e5");
+      if(color===null) return;
+      groups[gi].name = name; groups[gi].color = color||"#4f46e5";
+      save(groups); render();
+    });
+
+    card.querySelector("[data-act='remove-group']").addEventListener("click", ()=>{
+      if(!confirm("Remover grupo?")) return;
+      groups.splice(gi,1); save(groups); render();
+    });
+
+    card.querySelector("[data-act='open-group']").addEventListener("click", ()=>{
+      const urls = (groups[gi].items||[]).filter(i=>i.checked!==false && i.url).map(i=>i.url);
+      openMany(urls, Number(delayEl.value||0));
+    });
+
+    groupsEl.appendChild(card);
+  });
+}
+
+function openMany(urls, delayMs=0){
+  if(!urls || !urls.length) { alert("Nenhuma URL selecionada."); return; }
+  (async ()=>{
+    for(const u of urls){
+      try{ window.open(u, "_blank", "noopener,noreferrer"); }
+      catch(e){ console.error("Falha ao abrir:", u, e); }
+      if(delayMs>0) await new Promise(r=>setTimeout(r, delayMs));
+    }
+  })();
+}
+
+function exportJson(){
+  const blob = new Blob([JSON.stringify(groups,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download="ia-launcher-config.json"; a.click();
+  URL.revokeObjectURL(url);
+}
+function importJson(){
+  const input = document.createElement("input"); input.type="file"; input.accept="application/json";
+  input.onchange = e => {
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try{ const data = JSON.parse(rd.result); if(Array.isArray(data)){ groups=data; save(groups); render(); } else alert("JSON inválido"); }
+      catch{ alert("Falha ao ler JSON"); }
+    };
+    rd.readAsText(f);
+  };
+  input.click();
+}
+function escapeHtml(s){ return (s||"").replace(/[&<>]/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]) ); }
+function escapeAttr(s){ return escapeHtml(s).replace(/"/g,"&quot;"); }
+
+document.getElementById("openAll").addEventListener("click", ()=>{
+  const urls = groups.flatMap(g=>g.items||[]).filter(i=>i.checked!==false && i.url).map(i=>i.url);
+  openMany(urls, Number(delayEl.value||0));
+});
+document.getElementById("addGroup").addEventListener("click", ()=>{
+  const name = prompt("Nome do grupo"); if(!name) return;
+  const color = prompt("Cor (hex, ex.: #4f46e5)", "#4f46e5") || "#4f46e5";
+  groups.push({id:id(), name, color, items:[]}); save(groups); render();
+});
+document.getElementById("export").addEventListener("click", exportJson);
+document.getElementById("import").addEventListener("click", importJson);
+document.getElementById("reset").addEventListener("click", ()=>{
+  if(confirm("Restaurar configuração padrão?")){ groups = DEFAULT_GROUPS; save(groups); render(); }
+});
+
+render();
+</script>
+</body>
+</html>
