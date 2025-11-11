@@ -1,43 +1,50 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Launcher – Equipes de IA</title>
-  <meta name="description" content="Abra várias IAs em abas com um clique.">
+  <!-- PWA / ícones -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
   <style>
     :root{--bg:#f5f7fb;--fg:#0f172a;--muted:#475569;--card:#ffffff;--border:#e5e7eb;--accent:#4f46e5}
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    :root[data-theme='dark']{--bg:#0b1020;--fg:#dce3ff;--muted:#97a0c6;--card:#0f152b;--border:#1e2a4a;--accent:#8b86ff}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
     .container{max-width:1100px;margin:0 auto;padding:24px}
     h1{margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em}
     p{margin:6px 0 0;color:var(--muted)}
     .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:18px 0}
-    .btn{border:1px solid var(--border);background:#fff;border-radius:12px;padding:10px 14px;cursor:pointer}
-    .btn:hover{background:#fafafa}
+    .btn{border:1px solid var(--border);background:var(--card);color:var(--fg);border-radius:12px;padding:10px 14px;cursor:pointer}
+    .btn:hover{background:rgba(255,255,255,.04)}
     .btn-danger{border-color:#fecaca;background:#fff5f5}
+    :root[data-theme='dark'] .btn-danger{background:#2a0f12;border-color:#5b1a1c;color:#ffb4b4}
     .row{display:grid;grid-template-columns:1fr;gap:14px}
-    @media(min-width:840px){.row{grid-template-columns:1fr}}
-    .card{background:var(--card);border:1px solid var(--border);border-left:6px solid var(--accent);border-radius:16px;padding:16px;box-shadow:0 2px 6px rgba(15,23,42,.04)}
+    .card{background:var(--card);border:1px solid var(--border);border-left:6px solid var(--accent);border-radius:16px;padding:16px;box-shadow:0 2px 6px rgba(15,23,42,.08)}
     .card h2{margin:0 0 10px 0;font-size:18px}
-    .card .actions{display:flex;gap:8px;margin-bottom:10px}
+    .card .actions{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
     .grid{display:grid;grid-template-columns:1fr;gap:8px}
     @media(min-width:840px){.grid{grid-template-columns:1fr 1fr}}
-    .item{display:flex;gap:8px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px}
-    .item input[type='text']{border:1px solid var(--border);border-radius:10px;padding:8px}
+    .item{display:flex;gap:8px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px;background:transparent}
+    .item input[type='text']{border:1px solid var(--border);border-radius:10px;padding:8px;background:var(--card);color:var(--fg)}
     .name{flex:1 1 160px}
     .url{flex:2 1 300px}
     .footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;color:var(--muted);font-size:13px}
     .small{font-size:13px;color:var(--muted)}
     .tag{display:inline-block;padding:4px 8px;border-radius:10px;background:#eef2ff;color:#3730a3;font-size:12px;margin-left:8px}
+    :root[data-theme='dark'] .tag{background:#1c2050;color:#c9cbff}
     .checkbox{width:18px;height:18px}
     .color{width:14px;height:14px;border-radius:50%;display:inline-block;margin-right:8px;vertical-align:middle}
-    .input{border:1px solid var(--border);border-radius:10px;padding:8px;background:#fff}
+    .input{border:1px solid var(--border);border-radius:10px;padding:8px;background:var(--card);color:var(--fg)}
+    .toggle{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;cursor:pointer;background:var(--card)}
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Launcher – Equipes de IA <span class="tag">multi‑abas</span></h1>
-    <p class="small">Clique em <b>Abrir TUDO</b> ou em <b>Abrir todas</b> por grupo. Se o navegador bloquear, permita pop-ups para este site.</p>
+    <h1>Launcher – Equipes de IA <span class="tag">multi-abas</span></h1>
+    <p class="small">Clique em <b>Abrir TUDO</b> ou <b>Abrir todas</b> por grupo. Se o navegador bloquear, permita pop-ups para este site.</p>
 
     <div class="toolbar">
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -46,9 +53,14 @@
         <button class="btn" id="export">Exportar</button>
         <button class="btn" id="import">Importar</button>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <label class="small">Atraso entre abas (ms)</label>
-        <input class="input" style="width:110px" type="number" id="delay" min="0" step="50" value="0" title="Se pop-ups forem bloqueados, tente um pequeno atraso.">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="toggle" id="themeToggle" title="Alternar tema claro/escuro">
+          <span aria-hidden>🌓</span><span id="themeLabel">Tema: Claro</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label class="small">Atraso entre abas (ms)</label>
+          <input class="input" style="width:110px" type="number" id="delay" min="0" step="50" value="0">
+        </div>
       </div>
     </div>
 
@@ -61,24 +73,20 @@
   </div>
 
 <script>
-const DEFAULT_GROUPS = [
-  { id: id(), name: "Principais IAs", color: "#2563eb", items: [
-    { label: "ChatGPT", url: "https://chat.openai.com/", checked: true },
-    { label: "Claude", url: "https://claude.ai/", checked: true },
-    { label: "Gemini", url: "https://gemini.google.com/", checked: true },
-    { label: "Perplexity", url: "https://www.perplexity.ai/", checked: true },
-    { label: "Copilot", url: "https://copilot.microsoft.com/", checked: true },
-    { label: "Grok", url: "https://x.com/i/grok", checked: true },
-    { label: "Mistral", url: "https://chat.mistral.ai/", checked: true }
-  ]},
-  { id: id(), name: "Auxiliares", color: "#0f766e", items: [
-    { label: "NotebookLM", url: "https://notebooklm.google/", checked: true },
-    { label: "Kimi", url: "https://kimi.moonshot.cn/", checked: true }
-  ]}
-];
-
 const KEY = "ia-launcher-config-v1";
-function id(){ return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2); }
+const DEFAULT_GROUPS = [{"id": "grp1", "name": "EMT-01-ES", "color": "#4f46e5", "items": [{"label": "Claude 4 Sonnet", "url": "https://app.adapta.one/chats/86a63d0c-6595-4549-9dd7-669dddd30ed5", "checked": true}, {"label": "Gemini 2.5 Flash", "url": "https://app.adapta.one/chats/a978446e-2d12-45d2-87dc-9e45a2bbea01", "checked": true}, {"label": "GPT-4o", "url": "https://chatgpt.com/g/g-p-68abc6e4e8508191b025b4e541779c61/c/6906449f-bb84-8332-9ef6-ec3e4c8325b4", "checked": true}, {"label": "Perplexity", "url": "https://app.adapta.one/chats/70088b16-aaff-4bc6-b6c7-6c91735274ab", "checked": true}, {"label": "Sabia 3.1", "url": "https://app.innerai.com/projects/5ab190c0-7035-46d4-8f06-450974e38bad?sessionId=69359d82-f860-414b-91f7-a79284ea3a80", "checked": true}, {"label": "GPT-5", "url": "https://chatgpt.com/g/g-p-68abc6e4e8508191b025b4e541779c61/c/68c7648c-6638-8004-a3d5-6f1d7e2b0cf6", "checked": true}, {"label": "Command R", "url": "https://app.innerai.com/projects/5ab190c0-7035-46d4-8f06-450974e38bad?sessionId=65ae6d64-cdf7-43fa-8aee-bf6938dd1f89", "checked": true}]}];
+
+// THEME
+const themePrefKey = "ia-launcher-theme";
+function applyTheme(t){ document.documentElement.setAttribute('data-theme', t); document.getElementById('themeLabel').textContent = 'Tema: ' + (t==='dark'?'Escuro':'Claro'); }
+function loadTheme(){ return localStorage.getItem(themePrefKey) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
+function toggleTheme(){ const cur = document.documentElement.getAttribute('data-theme') || 'light'; const next = cur==='light'?'dark':'light'; applyTheme(next); localStorage.setItem(themePrefKey, next); }
+applyTheme(loadTheme());
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+});
+
+// STORAGE
 function load(){ try{ const j=localStorage.getItem(KEY); return j? JSON.parse(j): DEFAULT_GROUPS }catch(e){ return DEFAULT_GROUPS } }
 function save(groups){ try{ localStorage.setItem(KEY, JSON.stringify(groups)) }catch(e){} }
 
@@ -108,61 +116,38 @@ function render(){
     (g.items || []).forEach((it, ii) => {
       const row = document.createElement("div");
       row.className = "item";
+      const safeUrl = escapeAttr(it.url||"");
       row.innerHTML = `
         <input class="checkbox" type="checkbox" ${it.checked === false ? "" : "checked"} data-role="check">
         <input class="name" type="text" value="${escapeAttr(it.label||"")}" placeholder="Nome">
-        <input class="url" type="text" value="${escapeAttr(it.url||"")}" placeholder="https://...">
-        <button class="btn" data-act="test">Testar</button>
+        <input class="url" type="text" value="${safeUrl}" placeholder="https://...">
+        <a class="btn" href="${safeUrl}" target="_blank" rel="noopener noreferrer">Abrir</a>
         <button class="btn" data-act="remove">Remover</button>
       `;
-      // events
       row.querySelector("[data-role='check']").addEventListener("change", e => {
-        groups[gi].items[ii].checked = e.target.checked;
-        save(groups);
+        groups[gi].items[ii].checked = e.target.checked; save(groups);
       });
-      row.querySelector(".name").addEventListener("input", e=>{
-        groups[gi].items[ii].label = e.target.value;
-        save(groups);
-      });
-      row.querySelector(".url").addEventListener("input", e=>{
-        groups[gi].items[ii].url = e.target.value;
-        save(groups);
-      });
-      row.querySelector("[data-act='test']").addEventListener("click", ()=>{
-        const u = groups[gi].items[ii].url; if(u) window.open(u, "_blank", "noopener,noreferrer");
-      });
-      row.querySelector("[data-act='remove']").addEventListener("click", ()=>{
-        groups[gi].items.splice(ii,1); save(groups); render();
-      });
+      row.querySelector(".name").addEventListener("input", e=>{ groups[gi].items[ii].label = e.target.value; save(groups); });
+      row.querySelector(".url").addEventListener("input", e=>{ groups[gi].items[ii].url = e.target.value; save(groups); });
+      row.querySelector("[data-act='remove']").addEventListener("click", ()=>{ groups[gi].items.splice(ii,1); save(groups); render(); });
       grid.appendChild(row);
     });
 
     card.querySelector("[data-act='add-item']").addEventListener("click", ()=>{
       const url = prompt("Cole a URL (https://...)"); if(!url) return;
       const label = prompt("Nome curto (ex.: 'ChatGPT')") || url;
-      groups[gi].items.push({label, url, checked:true});
-      save(groups); render();
+      groups[gi].items.push({label, url, checked:true}); save(groups); render();
     });
-
     card.querySelector("[data-act='edit-group']").addEventListener("click", ()=>{
-      const name = prompt("Nome do grupo:", g.name || "");
-      if(name===null) return;
-      const color = prompt("Cor (hex):", g.color || "#4f46e5");
-      if(color===null) return;
-      groups[gi].name = name; groups[gi].color = color||"#4f46e5";
-      save(groups); render();
+      const name = prompt("Nome do grupo:", g.name || ""); if(name===null) return;
+      const color = prompt("Cor (hex):", g.color || "#4f46e5"); if(color===null) return;
+      groups[gi].name = name; groups[gi].color = color||"#4f46e5"; save(groups); render();
     });
-
-    card.querySelector("[data-act='remove-group']").addEventListener("click", ()=>{
-      if(!confirm("Remover grupo?")) return;
-      groups.splice(gi,1); save(groups); render();
-    });
-
+    card.querySelector("[data-act='remove-group']").addEventListener("click", ()=>{ if(!confirm("Remover grupo?")) return; groups.splice(gi,1); save(groups); render(); });
     card.querySelector("[data-act='open-group']").addEventListener("click", ()=>{
       const urls = (groups[gi].items||[]).filter(i=>i.checked!==false && i.url).map(i=>i.url);
       openMany(urls, Number(delayEl.value||0));
     });
-
     groupsEl.appendChild(card);
   });
 }
@@ -171,8 +156,7 @@ function openMany(urls, delayMs=0){
   if(!urls || !urls.length) { alert("Nenhuma URL selecionada."); return; }
   (async ()=>{
     for(const u of urls){
-      try{ window.open(u, "_blank", "noopener,noreferrer"); }
-      catch(e){ console.error("Falha ao abrir:", u, e); }
+      try{ window.open(u, "_blank", "noopener,noreferrer"); }catch(e){ console.error("Falha ao abrir:", u, e); }
       if(delayMs>0) await new Promise(r=>setTimeout(r, delayMs));
     }
   })();
@@ -204,16 +188,10 @@ document.getElementById("openAll").addEventListener("click", ()=>{
   const urls = groups.flatMap(g=>g.items||[]).filter(i=>i.checked!==false && i.url).map(i=>i.url);
   openMany(urls, Number(delayEl.value||0));
 });
-document.getElementById("addGroup").addEventListener("click", ()=>{
-  const name = prompt("Nome do grupo"); if(!name) return;
-  const color = prompt("Cor (hex, ex.: #4f46e5)", "#4f46e5") || "#4f46e5";
-  groups.push({id:id(), name, color, items:[]}); save(groups); render();
-});
+document.getElementById("addGroup").addEventListener("click", ()=>{ const name = prompt("Nome do grupo"); if(!name) return; const color = prompt("Cor (hex, ex.: #4f46e5)", "#4f46e5") || "#4f46e5"; groups.push({id:crypto.randomUUID(), name, color, items:[]}); save(groups); render(); });
 document.getElementById("export").addEventListener("click", exportJson);
 document.getElementById("import").addEventListener("click", importJson);
-document.getElementById("reset").addEventListener("click", ()=>{
-  if(confirm("Restaurar configuração padrão?")){ groups = DEFAULT_GROUPS; save(groups); render(); }
-});
+document.getElementById("reset").addEventListener("click", ()=>{ if(confirm("Restaurar configuração padrão?")){ groups = DEFAULT_GROUPS; save(groups); render(); } });
 
 render();
 </script>
