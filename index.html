@@ -1,227 +1,43 @@
+<!--
+  File: index.html
+  Project: AI Equipes Launcher
+  Page: MENU PRINCIPAL
+  Created-by: GPT-5 Thinking (scaffold)
+  Note: Icons for categories must be in /assets named AI-*-Equipes.png
+-->
 <!doctype html>
-<html lang="pt-br" data-theme="light">
+<html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Launcher – Equipes de IA</title>
+  <title>AI – Menu de Equipes</title>
+  <meta name="theme-color" content="#111827">
   <style>
-    :root{--bg:#f5f7fb;--fg:#0f172a;--muted:#475569;--card:#ffffff;--border:#e5e7eb;--accent:#4f46e5}
-    :root[data-theme='dark']{--bg:#0b1020;--fg:#dce3ff;--muted:#97a0c6;--card:#0f152b;--border:#1e2a4a;--accent:#8b86ff}
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
-    .container{max-width:980px;margin:0 auto;padding:18px}
-    h1{margin:0 0 6px 0;font-size:24px;font-weight:800;letter-spacing:-0.01em}
-    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin:12px 0}
-    .btn{border:1px solid var(--border);background:var(--card);color:var(--fg);border-radius:10px;padding:8px 12px;cursor:pointer}
-    .btn:hover{background:rgba(255,255,255,.05)}
-    .row{display:grid;grid-template-columns:1fr;gap:10px}
-    .card{background:var(--card);border:1px solid var(--border);border-left:6px solid var(--accent);border-radius:14px;padding:12px;box-shadow:0 2px 6px rgba(15,23,42,.06)}
-    .card h2{margin:0;font-size:16px;display:flex;align-items:center;gap:10px}
-    .card .head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
-    .chip{width:10px;height:10px;border-radius:50%}
-    .gicon-wrap a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:inherit}
-    .gicon{width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--border)}
-    .actions{display:flex;gap:6px;flex-wrap:wrap}
-    .grid{display:grid;grid-template-columns:1fr;gap:6px}
-    .grid.hidden{display:none}
-    .item{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:6px;background:transparent}
-    .left{display:flex;align-items:center;gap:8px;min-width:0}
-    .thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border);background:#fff}
-    .composite{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-    .urlbox{display:flex;align-items:center;gap:6px}
-    .url{width:360px;max-width:54vw;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--card);color:var(--fg)}
-    @media (max-width:640px){ .url{max-width:52vw} }
-    .small{font-size:12px;color:var(--muted)}
-    .toggle{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;cursor:pointer;background:var(--card)}
-    .footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;color:var(--muted);font-size:12px}
-    .chev{cursor:pointer;user-select:none}
-    .hint{font-size:12px;color:var(--muted)}
+    :root{--bg:#0b1020;--fg:#dce3ff;--muted:#8fa3d8;--card:#0f152b;--border:#1e2a4a;--accent:#8b86ff}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.35 system-ui,Segoe UI,Roboto,sans-serif}
+    .wrap{max-width:1040px;margin:0 auto;padding:24px}
+    h1{margin:0 0 12px 0;font-size:26px;font-weight:800;letter-spacing:-0.01em}
+    p{margin:0 0 18px 0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);background:var(--card);border-radius:14px;text-decoration:none;color:var(--fg);box-shadow:0 2px 6px rgba(2,6,23,.3)}
+    .card:hover{outline:1px solid var(--accent)}
+    .ico{width:48px;height:48px;border-radius:10px;border:1px solid var(--border);object-fit:cover;background:#000}
+    .label{font-weight:700}
+    .note{font-size:12px;color:var(--muted)}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Launcher – Equipes de IA</h1>
-    <div class="toolbar">
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn" id="openAll">Abrir TUDO</button>
-        <button class="btn" id="addGroup">+ Grupo</button>
-        <button class="btn" id="export">Exportar</button>
-        <button class="btn" id="import">Importar</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <div class="toggle" id="themeToggle" title="Alternar tema claro/escuro"><span>🌓</span><span id="themeLabel">Tema: Claro</span></div>
-        <label class="hint"><input type="checkbox" id="tmTitle"> Enviar título p/ Tampermonkey (#tabtitle)</label>
-        <div style="display:flex;align-items:center;gap:6px">
-          <label class="small">Atraso (ms)</label>
-          <input class="btn" style="width:100px" type="number" id="delay" min="0" step="50" value="0">
-        </div>
-      </div>
-    </div>
-
-    <div id="groups" class="row"></div>
-
-    <div class="footer">
-      <span>Configuração salva no navegador. Clique no **título do grupo** para minimizar/expandir.</span>
-      <button class="btn" id="reset">Restaurar padrão</button>
+  <div class="wrap">
+    <h1>AI – Menu de Equipes</h1>
+    <p>Escolha uma categoria. Os ícones devem estar em <code>/assets</code> com o mesmo nome da pasta (ex.: <code>AI-EMT-Equipes.png</code>).</p>
+    <div class="grid">
+      <a class="card" href="AI-AF-Equipes/ai-af-equipes.html"><img class="ico" src="assets/AI-AF-Equipes.png" alt=""><div><div class="label">AI-AF-Equipes</div><div class="note">Finanças / AF</div></div></a>
+      <a class="card" href="AI-CUR-Equipes/ai-cur-equipes.html"><img class="ico" src="assets/AI-CUR-Equipes.png" alt=""><div><div class="label">AI-CUR-Equipes</div><div class="note">Cursos/Estudos</div></div></a>
+      <a class="card" href="AI-DV-Equipes/ai-dv-equipes.html"><img class="ico" src="assets/AI-DV-Equipes.png" alt=""><div><div class="label">AI-DV-Equipes</div><div class="note">Dev / Ferramentas</div></div></a>
+      <a class="card" href="AI-EMT-Equipes/ai-emt-equipes.html"><img class="ico" src="assets/AI-EMT-Equipes.png" alt=""><div><div class="label">AI-EMT-Equipes</div><div class="note">Estudo de Materiais Técnicos</div></div></a>
+      <a class="card" href="AI-PRJ-Equipes/ai-prj-equipes.html"><img class="ico" src="assets/AI-PRJ-Equipes.png" alt=""><div><div class="label">AI-PRJ-Equipes</div><div class="note">Projetos</div></div></a>
+      <a class="card" href="AI-UNI-Equipes/ai-uni-equipes.html"><img class="ico" src="assets/AI-UNI-Equipes.png" alt=""><div><div class="label">AI-UNI-Equipes</div><div class="note">Universidade</div></div></a>
     </div>
   </div>
-
-<script>
-const KEY = "ia-launcher-config-v3";
-const DEFAULT_GROUPS = [{"id": "emt-01-es", "name": "EMT-01-ES", "color": "#4f46e5", "icon": "assets/EMT-01-ES.png", "iconHref": "#", "collapsed": true, "items": [{"code": "M01", "label": "Claude 4 Sonnet", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/86a63d0c-6595-4549-9dd7-669dddd30ed5", "checked": true, "img": ""}, {"code": "M02", "label": "Gemini 2.5 Flash", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/a978446e-2d12-45d2-87dc-9e45a2bbea01", "checked": true, "img": ""}, {"code": "M03", "label": "GPT-4o", "provider": "openAI", "url": "https://chatgpt.com/g/g-p-68abc6e4e8508191b025b4e541779c61/c/6906449f-bb84-8332-9ef6-ec3e4c8325b4", "checked": true, "img": ""}, {"code": "M04", "label": "Perplexity", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/70088b16-aaff-4bc6-b6c7-6c91735274ab", "checked": true, "img": ""}, {"code": "M05", "label": "Sabia 3.1", "provider": "Inner.AI", "url": "https://app.innerai.com/projects/5ab190c0-7035-46d4-8f06-450974e38bad?sessionId=69359d82-f860-414b-91f7-a79284ea3a80", "checked": true, "img": ""}, {"code": "SUP", "label": "GPT-5", "provider": "openAI", "url": "https://chatgpt.com/g/g-p-68abc6e4e8508191b025b4e541779c61/c/68c7648c-6638-8004-a3d5-6f1d7e2b0cf6", "checked": true, "img": ""}, {"code": "REV", "label": "Command R", "provider": "Inner.AI", "url": "https://app.innerai.com/projects/5ab190c0-7035-46d4-8f06-450974e38bad?sessionId=65ae6d64-cdf7-43fa-8aee-bf6938dd1f89", "checked": true, "img": ""}]}, {"id": "emt-02-fs", "name": "EMT-02-FS", "color": "#0ea5e9", "icon": "assets/EMT-02-FS.png", "iconHref": "#", "collapsed": true, "items": [{"code": "M01", "label": "GPT-4o", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/9cb08549-7173-48fe-ad92-9d2e49d3c70c", "checked": true, "img": ""}, {"code": "M02", "label": "DeepSeek V3", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/0bb6ba4d-f45e-4181-8e8b-36961407f659", "checked": true, "img": ""}, {"code": "M03", "label": "Qwen3 Max", "provider": "AdaptaONE26", "url": "https://agent.adapta.one/agentic-chat/019a454d-43ff-759d-89cd-16d9b5a0c4b5", "checked": true, "img": ""}, {"code": "M04", "label": "Claude 4.5 Sonnet", "provider": "AdaptaONE26", "url": "https://agent.adapta.one/agentic-chat/019a4552-ecd5-74fd-bc34-3c94718513e7", "checked": true, "img": ""}, {"code": "M05", "label": "Llama 4 Maverick", "provider": "AdaptaONE26", "url": "https://agent.adapta.one/agentic-chat/019a4554-954c-75a8-aacf-7c4a3d27a54c", "checked": true, "img": ""}, {"code": "SUP", "label": "GPT-5", "provider": "openAI", "url": "https://chatgpt.com/g/g-p-6911041963f48191bb501a771f7cada8-ai-emt-equipes/c/6911062f-7878-832c-ae3d-eb1c5b76f2cc", "checked": true, "img": ""}, {"code": "REV", "label": "GPT OSS", "provider": "Inner.IA", "url": "https://app.innerai.com/projects/7a1cd237-df12-43c1-8f61-ce072800ca2a?sessionId=4861e308-085e-45a5-9b98-9815fcd99b4c", "checked": true, "img": ""}]}];
-
-// THEME
-const themePrefKey = "ia-launcher-theme";
-function applyTheme(t){ document.documentElement.setAttribute('data-theme', t); document.getElementById('themeLabel').textContent = 'Tema: ' + (t==='dark'?'Escuro':'Claro'); }
-function loadTheme(){ return localStorage.getItem(themePrefKey) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); }
-function toggleTheme(){ const cur = document.documentElement.getAttribute('data-theme') || 'light'; const next = cur==='light'?'dark':'light'; applyTheme(next); localStorage.setItem(themePrefKey, next); }
-applyTheme(loadTheme());
-document.addEventListener('DOMContentLoaded', () => { document.getElementById('themeToggle').addEventListener('click', toggleTheme); });
-
-// STORAGE
-function load(){ try{ const j=localStorage.getItem(KEY); return j? JSON.parse(j): DEFAULT_GROUPS }catch(e){ return DEFAULT_GROUPS } }
-function save(groups){ try{ localStorage.setItem(KEY, JSON.stringify(groups)) }catch(e){} }
-
-let groups = load();
-const groupsEl = document.getElementById("groups");
-const delayEl = document.getElementById("delay");
-const tmEl = document.getElementById("tmTitle");
-
-function compositeText(it, groupName){ const parts = [groupName || '', it.code || '', it.label || '', it.provider || ''].filter(Boolean); return parts.join('|'); }
-
-// Build URL with #tabtitle=... (compatible with user's userscript). Spaces go as %20 (not '+').
-function buildUrlWithHash(u, title, useTM){ 
-  if(!useTM) return u;
-  const enc = encodeURIComponent(title); // no '+'
-  if(u.includes('#')) return u + '&tabtitle=' + enc;
-  return u + '#tabtitle=' + enc;
-}
-
-function render(){
-  groupsEl.innerHTML = "";
-  groups.forEach((g, gi) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.style.borderLeftColor = g.color || "#4f46e5";
-    card.innerHTML = `
-      <div class="head">
-        <h2 class="chev" data-act="toggle">
-          <span class="gicon-wrap"><a href="${g.iconHref || '#'}" target="_blank" rel="noopener">
-            <img class="gicon" src="${g.icon || ''}" alt="icon"></a></span>
-          <span class="chip" style="background:${g.color || "#4f46e5"}"></span>${escapeHtml(g.name || "Grupo")}
-        </h2>
-        <div class="actions">
-          <button class="btn" data-act="open-group">Abrir todas</button>
-          <button class="btn" data-act="add-item">+ IA</button>
-          <button class="btn" data-act="edit-group">Editar</button>
-          <button class="btn" data-act="remove-group">Remover</button>
-        </div>
-      </div>
-      <div class="grid" data-role="grid" style="display:${g.collapsed ? 'none':'grid'}"></div>
-    `;
-    const grid = card.querySelector("[data-role='grid']");
-    (g.items || []).forEach((it, ii) => {
-      const row = document.createElement("div");
-      row.className = "item";
-      const safeUrl = escapeAttr(it.url||"");
-      const imgSrc = escapeAttr(it.img || 'assets/default-thumb.png');
-      const text = [it.code || '', it.label || '', it.provider || ''].filter(Boolean).join(' | ');
-      row.innerHTML = `
-        <div class="left">
-          <input class="checkbox" type="checkbox" ${it.checked === false ? "" : "checked"} data-role="check">
-          <img class="thumb" src="${imgSrc}" alt="thumb">
-          <div class="composite" title="${escapeAttr(text)}">${escapeHtml(text)}</div>
-        </div>
-        <div class="urlbox">
-          <input class="url" type="text" value="${safeUrl}" placeholder="https://...">
-          <a class="btn" href="${safeUrl || '#'}" target="_blank" rel="noopener noreferrer">Abrir</a>
-        </div>
-        <div style="display:flex;gap:6px">
-          <button class="btn" data-act="image">Imagem</button>
-          <button class="btn" data-act="remove">Remover</button>
-        </div>
-      `;
-      // Events
-      row.querySelector("[data-role='check']").addEventListener("change", e => { g.items[ii].checked = e.target.checked; save(groups); });
-      const urlInput = row.querySelector(".url");
-      const openA = row.querySelector("a.btn");
-      urlInput.addEventListener("input", e=>{ g.items[ii].url = e.target.value; save(groups); openA.href = e.target.value || '#'; });
-      openA.addEventListener("click", (ev)=>{ 
-        if(!tmEl.checked) return; 
-        const title = compositeText(g.items[ii], g.name);
-        openA.href = buildUrlWithHash(g.items[ii].url, title, true);
-      });
-      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ 
-        const cur = g.items[ii].img || ''; 
-        const val = prompt("URL da imagem (ex.: assets/minhafigura.png)", cur);
-        if(val===null) return; 
-        g.items[ii].img = val.trim(); 
-        save(groups); render(); 
-      });
-      row.querySelector("[data-act='remove']").addEventListener("click", ()=>{ g.items.splice(ii,1); save(groups); render(); });
-      grid.appendChild(row);
-    });
-
-    // Group actions
-    card.querySelector("[data-act='add-item']").addEventListener("click", ()=>{ 
-      const url = prompt("Cole a URL (https://...)"); if(!url) return; 
-      const code = prompt("Código (ex.: M01)") || ""; 
-      const label = prompt("Nome da IA") || url; 
-      const provider = prompt("Empresa/Fornecedor", ""); 
-      g.items.push({label, url, code, provider, checked:true, img:""}); 
-      save(groups); render(); 
-    });
-    card.querySelector("[data-act='edit-group']").addEventListener("click", ()=>{ 
-      const name = prompt("Nome do grupo:", g.name || ""); if(name===null) return; 
-      const color = prompt("Cor (hex):", g.color || "#4f46e5"); if(color===null) return; 
-      const icon = prompt("Ícone (URL):", g.icon || ""); if(icon===null) return;
-      const iconHref = prompt("Link do ícone (ex.: Google Drive):", g.iconHref || "#"); if(iconHref===null) return;
-      g.name = name; g.color = color||"#4f46e5"; g.icon = icon; g.iconHref = iconHref || "#";
-      save(groups); render(); 
-    });
-    card.querySelector("[data-act='remove-group']").addEventListener("click", ()=>{ if(!confirm("Remover grupo?")) return; groups.splice(gi,1); save(groups); render(); });
-    card.querySelector("[data-act='open-group']").addEventListener("click", ()=>{ 
-      const urls = (g.items||[]).filter(i=>i.checked!==false && i.url).map(i=> buildUrlWithHash(i.url, compositeText(i, g.name), tmEl.checked));
-      openMany(urls, Number(delayEl.value||0)); 
-    });
-    card.querySelector("[data-act='toggle']").addEventListener("click", ()=>{ 
-      g.collapsed = !g.collapsed; 
-      save(groups); render(); 
-    });
-
-    groupsEl.appendChild(card);
-  });
-}
-
-function openMany(urls, delayMs=0){
-  if(!urls || !urls.length) { alert("Nenhuma URL selecionada."); return; }
-  (async ()=>{ for(const u of urls){ try{ window.open(u, "_blank", "noopener,noreferrer"); }catch(e){ console.error(e); } if(delayMs>0) await new Promise(r=>setTimeout(r, delayMs)); } })();
-}
-
-function exportJson(){
-  const blob = new Blob([JSON.stringify(groups,null,2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href=url; a.download="ia-launcher-config.json"; a.click();
-  URL.revokeObjectURL(url);
-}
-function importJson(){
-  const input = document.createElement("input"); input.type="file"; input.accept="application/json";
-  input.onchange = e => { const f = e.target.files && e.target.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = () => { try{ const data = JSON.parse(rd.result); if(Array.isArray(data)){ groups=data; save(groups); render(); } else alert("JSON inválido"); } catch{ alert("Falha ao ler JSON"); } }; rd.readAsText(f); };
-  input.click();
-}
-function escapeHtml(s){ return (s||"").replace(/[&<>]/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]) ); }
-function escapeAttr(s){ return escapeHtml(s).replace(/"/g,"&quot;"); }
-
-document.getElementById("openAll").addEventListener("click", ()=>{ 
-  const urls = [];
-  groups.forEach(g=> (g.items||[]).forEach(i=>{ if(i.checked!==false && i.url) urls.push(buildUrlWithHash(i.url, compositeText(i, g.name), tmEl.checked)); }));
-  openMany(urls, Number(delayEl.value||0)); 
-});
-document.getElementById("addGroup").addEventListener("click", ()=>{ const name = prompt("Nome do grupo"); if(!name) return; const color = prompt("Cor (hex, ex.: #4f46e5)", "#4f46e5") || "#4f46e5"; const icon = prompt("Ícone (URL, ex.: assets/icone.png)", ""); const iconHref = prompt("Link do ícone (ex.: Google Drive)", "#") || "#"; groups.push({id:crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2), name, color, icon, iconHref, collapsed:true, items:[]}); save(groups); render(); });
-document.getElementById("export").addEventListener("click", exportJson);
-document.getElementById("import").addEventListener("click", importJson);
-document.getElementById("reset").addEventListener("click", ()=>{ if(confirm("Restaurar configuração padrão?")){ groups = DEFAULT_GROUPS; save(groups); render(); } });
-
-render();
-</script>
 </body>
 </html>
