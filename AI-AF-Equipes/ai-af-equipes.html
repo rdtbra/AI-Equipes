@@ -1,11 +1,13 @@
+<!doctype html>
 <!--
-  File: index.html
+  File: ai-af-equipes.html
   Project: AI Equipes Launcher
   Page: AI-AF-Equipes
   Created-by: GPT-5 Thinking (scaffold)
-  Note: Icons live in ../assets. Edit via UI (Export/Import JSON) or commit initial JSON here.
+  Notes:
+   - Category icons are in /assets at repo root (used on main menu).
+   - Group-specific icons live in AI-AF-Equipes/assets/ (64x64 suggested).
 -->
-<!doctype html>
 <html lang="pt-br" data-theme="light">
 <head>
   <meta charset="utf-8">
@@ -26,12 +28,12 @@
     .head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
     .chip{width:10px;height:10px;border-radius:50%}
     .gicon-wrap a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:inherit}
-    .gicon{width:32px;height:32px;object-fit:cover;border-radius:6px;border:1px solid var(--border)}
+    .gicon{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
     .actions{display:flex;gap:6px;flex-wrap:wrap}
     .grid{display:grid;grid-template-columns:1fr;gap:6px}
     .item{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:6px;background:transparent}
     .left{display:flex;align-items:center;gap:8px;min-width:0}
-    .thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border);background:#0b1020}
+    .thumb{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--border);background:#0b1020}
     .composite{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
     .urlbox{display:flex;align-items:center;gap:6px}
     .url{width:360px;max-width:54vw;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--card);color:var(--fg)}
@@ -54,7 +56,7 @@
         <button class="btn" id="import">Importar</button>
       </div>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <label class="hint"><input type="checkbox" id="tmTitle"> Enviar título p/ Tampermonkey (#tabtitle)</label>
+        <label class="hint"><input type="checkbox" id="tmTitle" checked> Enviar título p/ Tampermonkey (#tabtitle)</label>
         <div style="display:flex;align-items:center;gap:6px">
           <label class="small">Atraso (ms)</label>
           <input class="btn" style="width:100px" type="number" id="delay" min="0" step="50" value="0">
@@ -72,7 +74,7 @@
 
 <script>
 const KEY = "ia-launcher-config:" + "AI-AF-Equipes";
-const DEFAULT_GROUPS = [];
+const DEFAULT_GROUPS = [{"id": "af-01-ib6", "name": "AF-01-IB6", "color": "#22c55e", "icon": "assets/AF-01-IB6.png", "iconHref": "#", "collapsed": true, "items": [{"code": "M01", "label": "Perplexity", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/8f391a6f-bb1d-40a9-974e-5e0128b1726c", "checked": true, "img": ""}, {"code": "M02", "label": "Gemini 2.5 Pro", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/8418189c-4f8b-4085-bdc7-5c6dae3d243f", "checked": true, "img": ""}, {"code": "M03", "label": "DeepSeek R1", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/4275da05-1436-4b1a-802b-c9129c20255e", "checked": true, "img": ""}, {"code": "M04", "label": "Claude 4.5 Sonnet", "provider": "AdaptaONE26", "url": "https://agent.adapta.one/agentic-chat/019a4583-4fa1-705f-b816-b571d2ddbf53", "checked": true, "img": ""}, {"code": "M05", "label": "GPT-4.1-mini", "provider": "openAI", "url": "https://chatgpt.com/g/g-p-676c4cf9ee6c8191b3e3307b8e4e9346/c/69078edc-e974-832d-8b78-a6d44fd68c33", "checked": true, "img": ""}, {"code": "SUP", "label": "GPT-5", "provider": "openAI", "url": "https://chatgpt.com/g/g-p-676c4cf9ee6c8191b3e3307b8e4e9346/c/68c76489-02f0-8004-b9b6-40a45b42d0b6", "checked": true, "img": ""}, {"code": "REV", "label": "Grok 3", "provider": "Inner.IA", "url": "https://app.innerai.com/projects/b17b1c90-4726-4f48-9f1b-320b55133cf1?sessionId=a1487813-e3e4-4c44-afb0-d5a843dc0b1f", "checked": true, "img": ""}]}, {"id": "af-02-lin", "name": "AF-02-LIN", "color": "#eab308", "icon": "assets/AF-02-LIN.png", "iconHref": "#", "collapsed": true, "items": [{"code": "M01", "label": "GPT-4o", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/46df1696-b0e3-4544-9c62-8cf7e098b747", "checked": true, "img": ""}, {"code": "M02", "label": "DeepSeek V3", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/aefeb6df-6e9c-4f0f-a7ca-0809607bbaae", "checked": true, "img": ""}, {"code": "M03", "label": "Qwen3 Max", "provider": "AdaptaONE26", "url": "https://agent.adapta.one/agentic-chat/019a4bcb-7a3a-732e-8ef6-9700c56a488f", "checked": true, "img": ""}, {"code": "M04", "label": "Grok 4 Fast", "provider": "Inner.IA", "url": "https://app.innerai.com/projects/f1d298c6-71a7-4c3f-b324-c4636f9d37b6?sessionId=22bfd770-f319-4c78-9d70-773d701fe477", "checked": true, "img": ""}, {"code": "M05", "label": "Claude 4.5 Sonnet", "provider": "AdaptaONE26", "url": "https://agent.adapta.one/agentic-chat/019a4bcf-bbb0-7038-9977-1982ffa96cd9", "checked": true, "img": ""}, {"code": "SUP", "label": "GPT-5", "provider": "openAI", "url": "https://chatgpt.com/g/g-p-68a3c7a502c08191b80a2c8c31dd1e48/c/68c76488-5824-8004-b833-63b822f4eb18", "checked": true, "img": ""}, {"code": "REV", "label": "Claude 4.5 Haiku", "provider": "AdaptaONE26", "url": "https://app.innerai.com/projects/f1d298c6-71a7-4c3f-b324-c4636f9d37b6?sessionId=83ad21d0-4a54-44cb-bf2e-e9b1966d3a75", "checked": true, "img": ""}]}];
 
 function compositeText(it, groupName){
   const parts = [groupName || '', it.code || '', it.label || '', it.provider || ''].filter(Boolean);
@@ -121,7 +123,7 @@ function render(){
       const row = document.createElement("div");
       row.className = "item";
       const safeUrl = escapeAttr(it.url||"");
-      const imgSrc = escapeAttr(it.img || '../assets/default-thumb.png');
+      const imgSrc = escapeAttr(it.img || 'assets/default-thumb.png');
       const text = [it.code || '', it.label || '', it.provider || ''].filter(Boolean).join(' | ');
       row.innerHTML = `
         <div class="left">
@@ -143,13 +145,13 @@ function render(){
       const openA = row.querySelector("a.btn");
       urlInput.addEventListener("input", e=>{ g.items[ii].url = e.target.value; save(groups); openA.href = e.target.value || '#'; });
       openA.addEventListener("click", ()=>{ if(!tmEl.checked) return; openA.href = buildUrlWithHash(g.items[ii].url, compositeText(g.items[ii], g.name), true); });
-      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ const cur = g.items[ii].img || ''; const val = prompt("URL da imagem (ex.: ../assets/minhafigura.png)", cur); if(val===null) return; g.items[ii].img = val.trim(); save(groups); render(); });
+      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ const cur = g.items[ii].img || ''; const val = prompt("URL da imagem (ex.: assets/minhafigura.png)", cur); if(val===null) return; g.items[ii].img = val.trim(); save(groups); render(); });
       row.querySelector("[data-act='remove']").addEventListener("click", ()=>{ g.items.splice(ii,1); save(groups); render(); });
       grid.appendChild(row);
     });
 
     card.querySelector("[data-act='add-item']").addEventListener("click", ()=>{ const url = prompt("Cole a URL (https://...)"); if(!url) return; const code = prompt("Código (ex.: M01)") || ""; const label = prompt("Nome da IA") || url; const provider = prompt("Empresa/Fornecedor", ""); g.items.push({label, url, code, provider, checked:true, img:""}); save(groups); render(); });
-    card.querySelector("[data-act='edit-group']").addEventListener("click", ()=>{ const name = prompt("Nome do grupo:", g.name || ""); if(name===null) return; const color = prompt("Cor (hex):", g.color || "#8b86ff"); if(color===null) return; const icon = prompt("Ícone (URL):", g.icon || ""); if(icon===null) return; const iconHref = prompt("Link do ícone (ex.: Google Drive):", g.iconHref || "#"); if(iconHref===null) return; g.name = name; g.color = color||"#8b86ff"; g.icon = icon; g.iconHref = iconHref || "#"; save(groups); render(); });
+    card.querySelector("[data-act='edit-group']").addEventListener("click", ()=>{ const name = prompt("Nome do grupo:", g.name || ""); if(name===null) return; const color = prompt("Cor (hex):", g.color || "#8b86ff"); if(color===null) return; const icon = prompt("Ícone (URL, ex.: assets/AF-01-IB6.png)", g.icon || ""); if(icon===null) return; const iconHref = prompt("Link do ícone (ex.: Google Drive):", g.iconHref || "#"); if(iconHref===null) return; g.name = name; g.color = color||"#8b86ff"; g.icon = icon; g.iconHref = iconHref || "#"; save(groups); render(); });
     card.querySelector("[data-act='remove-group']").addEventListener("click", ()=>{ if(!confirm("Remover grupo?")) return; groups.splice(gi,1); save(groups); render(); });
     card.querySelector("[data-act='open-group']").addEventListener("click", ()=>{ const urls = (g.items||[]).filter(i=>i.checked!==false && i.url).map(i=> buildUrlWithHash(i.url, compositeText(i, g.name), tmEl.checked)); openMany(urls, Number(delayEl.value||0)); });
     card.querySelector("[data-act='toggle']").addEventListener("click", ()=>{ g.collapsed = !g.collapsed; save(groups); render(); });
@@ -164,7 +166,7 @@ function openMany(urls, delayMs=0){
 function exportJson(){ const blob = new Blob([JSON.stringify(groups,null,2)], {type:"application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href=url; a.download="ia-launcher-config.json"; a.click(); URL.revokeObjectURL(url); }
 function importJson(){ const input = document.createElement("input"); input.type="file"; input.accept="application/json"; input.onchange = e => { const f = e.target.files && e.target.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = () => { try{ const data = JSON.parse(rd.result); if(Array.isArray(data)){ groups=data; save(groups); render(); } else alert("JSON inválido"); } catch{ alert("Falha ao ler JSON"); } }; rd.readAsText(f); }; input.click(); }
 document.getElementById("openAll").addEventListener("click", ()=>{ const urls = []; groups.forEach(g=> (g.items||[]).forEach(i=>{ if(i.checked!==false && i.url) urls.push(buildUrlWithHash(i.url, compositeText(i, g.name), tmEl.checked)); })); openMany(urls, Number(delayEl.value||0)); });
-document.getElementById("addGroup").addEventListener("click", ()=>{ const name = prompt("Nome do grupo"); if(!name) return; const color = prompt("Cor (hex, ex.: #8b86ff)", "#8b86ff") || "#8b86ff"; const icon = prompt("Ícone (URL, ex.: ../assets/icone.png)", ""); const iconHref = prompt("Link do ícone (ex.: Google Drive)", "#") || "#"; groups.push({id:crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2), name, color, icon, iconHref, collapsed:true, items:[]}); save(groups); render(); });
+document.getElementById("addGroup").addEventListener("click", ()=>{ const name = prompt("Nome do grupo"); if(!name) return; const color = prompt("Cor (hex, ex.: #8b86ff)", "#8b86ff") || "#8b86ff"; const icon = prompt("Ícone (URL, ex.: assets/AF-XX.png)", ""); const iconHref = prompt("Link do ícone (ex.: Google Drive)", "#") || "#"; groups.push({id:crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2), name, color, icon, iconHref, collapsed:true, items:[]}); save(groups); render(); });
 document.getElementById("export").addEventListener("click", exportJson);
 document.getElementById("import").addEventListener("click", importJson);
 document.getElementById("reset").addEventListener("click", ()=>{ if(confirm("Restaurar configuração padrão?")){ groups = DEFAULT_GROUPS; save(groups); render(); } });
