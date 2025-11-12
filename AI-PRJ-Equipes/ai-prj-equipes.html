@@ -1,11 +1,13 @@
+<!doctype html>
 <!--
-  File: index.html
+  File: ai-prj-equipes.html
   Project: AI Equipes Launcher
   Page: AI-PRJ-Equipes
   Created-by: GPT-5 Thinking (scaffold)
-  Note: Icons live in ../assets. Edit via UI (Export/Import JSON) or commit initial JSON here.
+  Notes:
+   - Ícone da categoria no menu: /assets/AI-PRJ-Equipes.png (raiz do repo).
+   - Ícones de grupo: AI-PRJ-Equipes/assets/<GRUPO>.png (64×64).
 -->
-<!doctype html>
 <html lang="pt-br" data-theme="light">
 <head>
   <meta charset="utf-8">
@@ -15,7 +17,7 @@
   <style>
     :root{--bg:#0b1020;--fg:#dce3ff;--muted:#97a0c6;--card:#0f152b;--border:#1e2a4a;--accent:#8b86ff}
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
-    .container{max-width:980px;margin:0 auto;padding:18px}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
     h1{margin:0 0 6px 0;font-size:24px;font-weight:800;letter-spacing:-0.01em}
     .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin:12px 0}
     .btn{border:1px solid var(--border);background:var(--card);color:var(--fg);border-radius:10px;padding:8px 12px;cursor:pointer}
@@ -26,15 +28,15 @@
     .head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
     .chip{width:10px;height:10px;border-radius:50%}
     .gicon-wrap a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:inherit}
-    .gicon{width:32px;height:32px;object-fit:cover;border-radius:6px;border:1px solid var(--border)}
+    .gicon{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
     .actions{display:flex;gap:6px;flex-wrap:wrap}
     .grid{display:grid;grid-template-columns:1fr;gap:6px}
     .item{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:6px;background:transparent}
     .left{display:flex;align-items:center;gap:8px;min-width:0}
-    .thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border);background:#0b1020}
+    .thumb{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--border);background:#0b1020}
     .composite{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
     .urlbox{display:flex;align-items:center;gap:6px}
-    .url{width:360px;max-width:54vw;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--card);color:var(--fg)}
+    .url{width:420px;max-width:60vw;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--card);color:var(--fg)}
     @media (max-width:640px){ .url{max-width:52vw} }
     .small{font-size:12px;color:var(--muted)}
     .footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;color:var(--muted);font-size:12px}
@@ -54,7 +56,7 @@
         <button class="btn" id="import">Importar</button>
       </div>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <label class="hint"><input type="checkbox" id="tmTitle"> Enviar título p/ Tampermonkey (#tabtitle)</label>
+        <label class="hint"><input type="checkbox" id="tmTitle" checked> Enviar título p/ Tampermonkey (#tabtitle)</label>
         <div style="display:flex;align-items:center;gap:6px">
           <label class="small">Atraso (ms)</label>
           <input class="btn" style="width:100px" type="number" id="delay" min="0" step="50" value="0">
@@ -72,7 +74,7 @@
 
 <script>
 const KEY = "ia-launcher-config:" + "AI-PRJ-Equipes";
-const DEFAULT_GROUPS = [];
+const DEFAULT_GROUPS = [{"id": "prj-01-erp", "name": "PRJ-01-ERP", "color": "#fb7185", "icon": "assets/PRJ-01-ERP.png", "iconHref": "#", "collapsed": true, "items": [{"code": "M01", "label": "GPT-4o", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/131584ec-0afb-4edd-a4c8-9201ebec6e76", "checked": true, "img": ""}, {"code": "M02", "label": "Claude 4.5 Sonnet", "provider": "Inner.IA", "url": "https://app.innerai.com/projects/7a7408cf-21f5-4173-8561-1a9358f234b8?sessionId=3671c948-9b4f-461a-bdd0-260bd4c33796", "checked": true, "img": ""}, {"code": "M03", "label": "DeepSeek R1", "provider": "AdaptaONE", "url": "https://app.adapta.one/chats/9fb906b8-65cb-4c21-8b56-d36f84355621", "checked": true, "img": ""}, {"code": "M04", "label": "Gemini 2.5 Pro", "provider": "Inner.AI", "url": "https://app.innerai.com/projects/7a7408cf-21f5-4173-8561-1a9358f234b8?sessionId=2a4615c3-4cbc-47ff-9d7e-1dd0fbe1301c", "checked": true, "img": ""}, {"code": "M05", "label": "Mistral Large 2", "provider": "Inner.IA", "url": "https://app.innerai.com/projects/7a7408cf-21f5-4173-8561-1a9358f234b8?sessionId=a6c54099-6f41-4584-95a9-26967958363d", "checked": true, "img": ""}, {"code": "SUP", "label": "GPT-5", "provider": "openAI", "url": "https://chatgpt.com/g/g-p-676c2a25f388819195a4e3b63221ac06-prj-01-erp/c/6907f46a-4338-832e-b5d6-3bb3ead6b72f", "checked": true, "img": ""}, {"code": "REV", "label": "Claude 4.5 Sonnet Thinking", "provider": "Inner.AI", "url": "https://app.innerai.com/projects/7a7408cf-21f5-4173-8561-1a9358f234b8?sessionId=7b122f26-a121-4fab-824f-98a050d64f21", "checked": true, "img": ""}]}];
 
 function compositeText(it, groupName){
   const parts = [groupName || '', it.code || '', it.label || '', it.provider || ''].filter(Boolean);
@@ -121,7 +123,7 @@ function render(){
       const row = document.createElement("div");
       row.className = "item";
       const safeUrl = escapeAttr(it.url||"");
-      const imgSrc = escapeAttr(it.img || '../assets/default-thumb.png');
+      const imgSrc = escapeAttr(it.img || 'assets/default-thumb.png');
       const text = [it.code || '', it.label || '', it.provider || ''].filter(Boolean).join(' | ');
       row.innerHTML = `
         <div class="left">
@@ -143,13 +145,13 @@ function render(){
       const openA = row.querySelector("a.btn");
       urlInput.addEventListener("input", e=>{ g.items[ii].url = e.target.value; save(groups); openA.href = e.target.value || '#'; });
       openA.addEventListener("click", ()=>{ if(!tmEl.checked) return; openA.href = buildUrlWithHash(g.items[ii].url, compositeText(g.items[ii], g.name), true); });
-      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ const cur = g.items[ii].img || ''; const val = prompt("URL da imagem (ex.: ../assets/minhafigura.png)", cur); if(val===null) return; g.items[ii].img = val.trim(); save(groups); render(); });
+      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ const cur = g.items[ii].img || ''; const val = prompt("URL da imagem (ex.: assets/minhafigura.png)", cur); if(val===null) return; g.items[ii].img = val.trim(); save(groups); render(); });
       row.querySelector("[data-act='remove']").addEventListener("click", ()=>{ g.items.splice(ii,1); save(groups); render(); });
       grid.appendChild(row);
     });
 
     card.querySelector("[data-act='add-item']").addEventListener("click", ()=>{ const url = prompt("Cole a URL (https://...)"); if(!url) return; const code = prompt("Código (ex.: M01)") || ""; const label = prompt("Nome da IA") || url; const provider = prompt("Empresa/Fornecedor", ""); g.items.push({label, url, code, provider, checked:true, img:""}); save(groups); render(); });
-    card.querySelector("[data-act='edit-group']").addEventListener("click", ()=>{ const name = prompt("Nome do grupo:", g.name || ""); if(name===null) return; const color = prompt("Cor (hex):", g.color || "#8b86ff"); if(color===null) return; const icon = prompt("Ícone (URL):", g.icon || ""); if(icon===null) return; const iconHref = prompt("Link do ícone (ex.: Google Drive):", g.iconHref || "#"); if(iconHref===null) return; g.name = name; g.color = color||"#8b86ff"; g.icon = icon; g.iconHref = iconHref || "#"; save(groups); render(); });
+    card.querySelector("[data-act='edit-group']").addEventListener("click", ()=>{ const name = prompt("Nome do grupo:", g.name || ""); if(name===null) return; const color = prompt("Cor (hex):", g.color || "#8b86ff"); if(color===null) return; const icon = prompt("Ícone (URL, ex.: assets/PRJ-01-ERP.png)", g.icon || ""); if(icon===null) return; const iconHref = prompt("Link do ícone (ex.: Google Drive):", g.iconHref || "#"); if(iconHref===null) return; g.name = name; g.color = color||"#8b86ff"; g.icon = icon; g.iconHref = iconHref || "#"; save(groups); render(); });
     card.querySelector("[data-act='remove-group']").addEventListener("click", ()=>{ if(!confirm("Remover grupo?")) return; groups.splice(gi,1); save(groups); render(); });
     card.querySelector("[data-act='open-group']").addEventListener("click", ()=>{ const urls = (g.items||[]).filter(i=>i.checked!==false && i.url).map(i=> buildUrlWithHash(i.url, compositeText(i, g.name), tmEl.checked)); openMany(urls, Number(delayEl.value||0)); });
     card.querySelector("[data-act='toggle']").addEventListener("click", ()=>{ g.collapsed = !g.collapsed; save(groups); render(); });
@@ -164,7 +166,7 @@ function openMany(urls, delayMs=0){
 function exportJson(){ const blob = new Blob([JSON.stringify(groups,null,2)], {type:"application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href=url; a.download="ia-launcher-config.json"; a.click(); URL.revokeObjectURL(url); }
 function importJson(){ const input = document.createElement("input"); input.type="file"; input.accept="application/json"; input.onchange = e => { const f = e.target.files && e.target.files[0]; if(!f) return; const rd = new FileReader(); rd.onload = () => { try{ const data = JSON.parse(rd.result); if(Array.isArray(data)){ groups=data; save(groups); render(); } else alert("JSON inválido"); } catch{ alert("Falha ao ler JSON"); } }; rd.readAsText(f); }; input.click(); }
 document.getElementById("openAll").addEventListener("click", ()=>{ const urls = []; groups.forEach(g=> (g.items||[]).forEach(i=>{ if(i.checked!==false && i.url) urls.push(buildUrlWithHash(i.url, compositeText(i, g.name), tmEl.checked)); })); openMany(urls, Number(delayEl.value||0)); });
-document.getElementById("addGroup").addEventListener("click", ()=>{ const name = prompt("Nome do grupo"); if(!name) return; const color = prompt("Cor (hex, ex.: #8b86ff)", "#8b86ff") || "#8b86ff"; const icon = prompt("Ícone (URL, ex.: ../assets/icone.png)", ""); const iconHref = prompt("Link do ícone (ex.: Google Drive)", "#") || "#"; groups.push({id:crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2), name, color, icon, iconHref, collapsed:true, items:[]}); save(groups); render(); });
+document.getElementById("addGroup").addEventListener("click", ()=>{ const name = prompt("Nome do grupo"); if(!name) return; const color = prompt("Cor (hex, ex.: #8b86ff)", "#8b86ff") || "#8b86ff"; const icon = prompt("Ícone (URL, ex.: assets/PRJ-01-ERP.png)", ""); const iconHref = prompt("Link do ícone (ex.: Google Drive)", "#") || "#"; groups.push({id:crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2), name, color, icon, iconHref, collapsed:true, items:[]}); save(groups); render(); });
 document.getElementById("export").addEventListener("click", exportJson);
 document.getElementById("import").addEventListener("click", importJson);
 document.getElementById("reset").addEventListener("click", ()=>{ if(confirm("Restaurar configuração padrão?")){ groups = DEFAULT_GROUPS; save(groups); render(); } });
