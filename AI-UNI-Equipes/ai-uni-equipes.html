@@ -22,9 +22,9 @@
     .gicon{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
     .actions{display:flex;gap:6px;flex-wrap:wrap}
     .grid{display:grid;grid-template-columns:1fr;gap:6px}
-    .item{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:6px;background:transparent}
-    .left{display:flex;align-items:center;gap:8px;min-width:0}
-    .thumb{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--border);background:#0b1020}
+    .item{display:grid;grid-template-columns:auto 1fr auto;gap:4px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:2px 6px;background:transparent}
+    .left{display:flex;align-items:center;gap:4px;min-width:0}
+    
     .composite{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
     .urlbox{display:flex;align-items:center;gap:6px}
     .url{width:420px;max-width:60vw;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--card);color:var(--fg)}
@@ -119,7 +119,6 @@ function render(){
       row.innerHTML = `
         <div class="left">
           <input class="checkbox" type="checkbox" ${it.checked === false ? "" : "checked"} data-role="check">
-          <img class="thumb" src="${imgSrc}" alt="thumb">
           <div class="composite" title="${escapeAttr(text)}">${escapeHtml(text)}</div>
         </div>
         <div class="urlbox">
@@ -127,7 +126,6 @@ function render(){
           <a class="btn" href="${safeUrl || '#'}" target="_blank" rel="noopener noreferrer">Abrir</a>
         </div>
         <div style="display:flex;gap:6px">
-          <button class="btn" data-act="image">Imagem</button>
           <button class="btn" data-act="remove">Remover</button>
         </div>
       `;
@@ -136,7 +134,6 @@ function render(){
       const openA = row.querySelector("a.btn");
       urlInput.addEventListener("input", e=>{ g.items[ii].url = e.target.value; save(groups); openA.href = e.target.value || '#'; });
       openA.addEventListener("click", ()=>{ if(!tmEl.checked) return; openA.href = buildUrlWithHash(g.items[ii].url, compositeText(g.items[ii], g.name), true); });
-      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ const cur = g.items[ii].img || ''; const val = prompt("URL da imagem (ex.: assets/minhafigura.png)", cur); if(val===null) return; g.items[ii].img = val.trim(); save(groups); render(); });
       row.querySelector("[data-act='remove']").addEventListener("click", ()=>{ g.items.splice(ii,1); save(groups); render(); });
       grid.appendChild(row);
     });
