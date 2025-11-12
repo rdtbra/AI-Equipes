@@ -136,61 +136,7 @@ function render(){
       const openA = row.querySelector("a.btn");
       urlInput.addEventListener("input", e=>{ g.items[ii].url = e.target.value; save(groups); openA.href = e.target.value || '#'; });
       openA.addEventListener("click", ()=>{ if(!tmEl.checked) return; openA.href = buildUrlWithHash(g.items[ii].url, compositeText(g.items[ii], g.name), true); });
-      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ const cur = g.items[ii].img || ''; const val = prompt("URL da imagem (ex.: assets/minhafigura.png)", cur); if(val===null) return; g.items[ii].img = val.trim(); save(groups); 
-// --- Auto-ícone por IA (força no render; assets dinâmico) ---
-(function () {
-  if (window.__aiIconForced) return;
-  window.__aiIconForced = true;
-
-  const inSubfolder = /\/AI-[A-Z]+-Equipes\//i.test(location.pathname);
-  const assetsBase = inSubfolder ? "../assets/" : "assets/";
-
-  const rules = [
-    [/\b(openai|chatgpt|gpt-?4(\.1)?|gpt-?4o|gpt-?3\.5|o3|o4(\s*mini)?)\b/i, "ai_chatgpt.png"],
-    [/\b(anthropic|claude)\b/i, "ai_claude.png"],
-    [/\bgemini\b.*\bflash\b/i, "ai_gemini_flash.png"],
-    [/\bgemini\b.*\bpro\b/i,   "ai_gemini_pro.png"],
-    [/\bgemini\b/i,            "ai_gemini_pro.png"],
-    [/\bdeep\s*seek\b.*\br1\b/i, "ai_deepseek_r1.png"],
-    [/\bdeep\s*seek\b.*\bv3\b/i, "ai_deepseek_v3.png"],
-    [/\bdeep\s*seek\b/i,         "ai_deepseek_r1.png"],
-    [/\bcommand\s*r\b/i, "ai_commandr.png"],
-    [/\bperplexity\b/i,  "ai_perplexity.png"],
-    [/\bmistral\b/i,     "ai_mistral.png"],
-    [/\b(llama|meta)\b/i, "ai_llama.png"],
-    [/\b(qwen|qwq)\b/i,  "ai_qwen_qwq.png"],
-    [/\bgrok\b/i,        "ai_grok.png"],
-    [/\bkimi\b|\bk2\b/i, "ai_kimi_k2.png"],
-    [/\bamazon\b.*\bnova\b/i, "ai_amazon_nova.png"],
-    [/\bsabia\b/i,       "ai_sabia.png"],
-  ];
-
-  const isThumb = (v) => !v || /default-thumb/i.test(v);
-
-  const pick = (label, provider) => {
-    const t = `${label||""} ${provider||""}`.trim();
-    for (const [rx, file] of rules) if (rx.test(t)) return assetsBase + file;
-    return null;
-  };
-
-  const _render = window.render;
-  window.render = function () {
-    try {
-      (window.groups || []).forEach(g => {
-        (g.items || []).forEach(it => {
-          if (isThumb(it.img)) {
-            const chosen = pick(it.label, it.provider);
-            if (chosen) it.img = chosen;
-          }
-        });
-      });
-      try { window.save && window.save(window.groups); } catch {}
-    } catch (e) { console && console.warn && console.warn("auto-icon patch:", e); }
-    return _render.apply(this, arguments);
-  };
-})();
-// --- fim do patch ----
-render(); });
+      row.querySelector("[data-act='image']").addEventListener("click", ()=>{ const cur = g.items[ii].img || ''; const val = prompt("URL da imagem (ex.: assets/minhafigura.png)", cur); if(val===null) return; g.items[ii].img = val.trim(); save(groups); render(); });
       row.querySelector("[data-act='remove']").addEventListener("click", ()=>{ g.items.splice(ii,1); save(groups); render(); });
       grid.appendChild(row);
     });
