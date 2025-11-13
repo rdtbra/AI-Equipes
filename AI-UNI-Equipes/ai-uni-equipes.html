@@ -22,7 +22,7 @@
     .gicon{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
     .actions{display:flex;gap:6px;flex-wrap:wrap}
     .grid{display:grid;grid-template-columns:1fr;gap:6px}
-    .item{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:6px;background:transparent}
+    .item{display:grid;grid-template-columns:auto 1fr auto;gap:4px;align-items:center;border:1px solid var(--border);border-radius:10px;padding:2px 6px;background:transparent}
     .left{display:flex;align-items:center;gap:8px;min-width:0}
     
     .composite{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
@@ -118,13 +118,15 @@ function render(){
       const text = [it.code || '', it.label || '', it.provider || ''].filter(Boolean).join(' | ');
       row.innerHTML = `
         <div class="left">
-          <input class="checkbox" type="checkbox" ${it.checked === false ? "" : "checked"} data-role="check"><div class="composite" title="${escapeAttr(text)}">${escapeHtml(text)}</div>
+          <input class="checkbox" type="checkbox" ${it.checked === false ? "" : "checked"} data-role="check">
+<div class="composite" title="${escapeAttr(text)}">${escapeHtml(text)}</div>
         </div>
         <div class="urlbox">
           <input class="url" type="text" value="${safeUrl}" placeholder="https://...">
           <a class="btn" href="${safeUrl || '#'}" target="_blank" rel="noopener noreferrer">Abrir</a>
         </div>
-        <div style="display:flex;gap:6px"><button class="btn" data-act="remove">Remover</button>
+        <div style="display:flex;gap:6px">
+<button class="btn" data-act="remove">Remover</button>
         </div>
       `;
       row.querySelector("[data-role='check']").addEventListener("change", e => { g.items[ii].checked = e.target.checked; save(groups); });
